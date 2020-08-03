@@ -1,5 +1,4 @@
 $(function() {
-
   let tune = {};
   let currentHandling = {};
 
@@ -9,8 +8,9 @@ $(function() {
   let brakingSlider = $("#brakingSlider");
   let drivetrainSlider = $("#drivetrainSlider")
   
-  window.onload = (e) => {
+  window.onload = e => {
     $("#container").hide();
+    
     window.addEventListener("message", (event) => {
       let data = event.data;
       if (data !== undefined && data.type === "tunerchip-ui") {
@@ -32,25 +32,25 @@ $(function() {
   }
 
   // Detect when [ESC] key is clicked to close Menu
-  document.onkeyup = function (data) {
+  document.onkeyup = (data) => {
     if (data.which == 27) {
       $.post("http://xgc-tunerchip/closeTuner", JSON.stringify({}));
     }
   };
 
-  $("#saveButton").click(function () {
+  $("#saveButton").click(() => {
     tune.uiValues = {
       boost: JSON.parse(boostSlider.val()),
       acceleration: JSON.parse(accelerationSlider.val()),
       gearchange: JSON.parse(gearSlider.val()),
       braking: JSON.parse(brakingSlider.val()),
       drivetrain: JSON.parse(drivetrainSlider.val())
-    }
+    };
+    
     $.post("http://xgc-tunerchip/saveTune", JSON.stringify(tune));
   });
 
-  $("#defaultTuneButton").click(function () {
-
+  $("#defaultTuneButton").click(() => {
     // Updating on UI
     boostSlider.val(0);
     accelerationSlider.val(0);
@@ -68,8 +68,7 @@ $(function() {
     updateCurrentValues(tune.boost, tune.acceleration, tune.gearchange, tune.braking, tune.drivetrain)
   });
 
-    $("#sportTuneButton").click(function () {
-
+    $("#sportTuneButton").click(() => {
       // Updating on UI
       boostSlider.val(10);
       accelerationSlider.val(10);
@@ -88,31 +87,31 @@ $(function() {
     });
 
 
-  boostSlider.on("input", (event) => {
+  boostSlider.on("input", event => {
     let newBoost = calcBoost(currentHandling.fInitialDriveForce, $(event.target).val());
     tune.boost = newBoost;
     $("#currentBoost").html(newBoost);
   });
 
-  accelerationSlider.on("input", (event) => {
+  accelerationSlider.on("input", event => {
     let newAcceleration = calcAcc(currentHandling.fDriveInertia, $(event.target).val());
     tune.acceleration = JSON.parse(newAcceleration);
     $("#currentAcceleration").html(newAcceleration);
   });
 
-  gearSlider.on("input", (event) => {
+  gearSlider.on("input", event => {
     let newGearChange = calcGears(currentHandling.fClutchChangeRateScaleUpShift, $(event.target).val());
     tune.gearchange = JSON.parse(newGearChange);
     $("#currentGearChange").html(newGearChange);
   });
 
-  brakingSlider.on("input", (event) => {
+  brakingSlider.on("input", event => {
     let newBraking = calcBrakes(10, $(event.target).val());
     tune.braking = JSON.parse(newBraking);
     $("#currentBraking").html(newBraking);
   });
 
-  drivetrainSlider.on("input", (event) => {
+  drivetrainSlider.on("input", event => {
     let newDriveTrain = calcDriveTrain(10, $(event.target).val());
     tune.drivetrain = JSON.parse(newDriveTrain);
     $("#currentDriveTrain").html(newDriveTrain);
