@@ -1,6 +1,4 @@
 let ESX = null;
-emit("esx:getSharedObject", function(obj) { ESX = obj});
+emit("esx:getSharedObject", obj => {ESX = obj});
 
-ESX.RegisterUsableItem("tunerchip", (source) => {
-	emitNet("xgc-tuner:openTuner", source)
-});
+ESX.RegisterUsableItem("tunerchip", source => emitNet("xgc-tuner:openTuner", source));
